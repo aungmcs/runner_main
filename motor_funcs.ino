@@ -1,6 +1,6 @@
 
 void readEncoder1(){
-  /* generates counts from the left motor encoder */
+  /* generates counts from the left motor encoder*/
 
   if(digitalRead(encoderPinA1) == digitalRead(encoderPinB1))
   {
