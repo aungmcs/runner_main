@@ -1,14 +1,110 @@
+//----------------------------------------------------//
+//-----------  Go Straight With own PID  -------------//
+//----------------------------------------------------//
+
+void pidController(){
+  /* output: required bits (volts) to the motors
+           : bit_right and bit_left in the range of 0 to 255
+   */
+
+
+   now_time = millis();
+
+
+
+    // from count to angle of the rotation of the wheels
+   angle_left = (360.0/660.0) * countLeft; //check both speeds again.
+   angle_right = (360.0/660.0) * countRight;
+
+
+
+   // from degree to radian conversion
+   radian_left = angle_left * (PI/180.0);
+   radian_right = angle_right * (PI/180.0);
+
+
+
+   dt = now_time - prv_time; // dt is fine
+
+
+
+   // angular velocity = d(angle) / dt --> unit = rad/s
+   // actual_velo_left = (radian_left - prv_radian_left) * 1000  / dt;
+   // actual_velo_right =  (radian_right - prv_radian_right) * 1000  / dt;
+
+   actual_velo_left = (radian_left - prv_radian_left)   / (double)(dt*0.001);
+   actual_velo_right =  (radian_right - prv_radian_right)  / (double)(dt*0.001);
+
+
+   error_left = desire_speed - actual_velo_left;
+   error_right = desire_speed - actual_velo_right;
+
+
+
+   volt_left = (Kp1*error_left) + (Ki1*(error_left + prv_error_left))+ (Kd1*(error_left - prv_error_left));
+
+
+   volt_right = (Kp2*error_right) + (Ki2*(error_right + prv_error_right)) + (Kd2*(error_right - prv_error_right));
+
+
+   bit_left = (volt_left / 12.0) * 255.0;
+   bit_left = constrain(bit_left, 0, 255);
+   // if (bit_left > 255.0) { bit_left = 255.0; }
+   // else { bit_left = bit_left; }
+
+
+   bit_right = (volt_right / 12.0) * 255.0;
+   bit_right = constrain(bit_right, 0, 255);
+   // if (bit_right > 255.0){bit_right = 255.0;}
+   // else{bit_right = bit_right;}
+
+
+   // driveForward(bit_left, bit_right);
+   digitalWrite(cw_left, HIGH);
+   digitalWrite(ccw_left, LOW);
+   analogWrite(pwm_left, bit_left);
+
+   digitalWrite(cw_right, LOW);
+   digitalWrite(ccw_right, HIGH);
+   analogWrite(pwm_right, bit_right);
+
+   // Without serial the motors don't operate
+   // Serial.print("Desire Speed: ");
+   // Serial.print(desire_speed);
+   // Serial.print(" Left Motor: ");
+   // Serial.print(actual_velo_left);
+   // Serial.print(" Right Motor: ");
+   // Serial.println(actual_velo_right);
+
+   // Serial.print("Desire Speed: ");
+   Serial.print(desire_speed);
+   Serial.print(" ");
+   Serial.print(actual_velo_left);
+   Serial.print(" ");
+   Serial.println(actual_velo_right);
+
+
+   prv_time = now_time;
+
+   prv_radian_left = radian_left;
+   prv_radian_right = radian_right;
+
+   prv_error_left = error_left;
+   // prv_error_right = error_right;
+
+}
+
 
 void readEncoder1(){
   /* generates counts from the left motor encoder*/
 
   if(digitalRead(encoderPinA1) == digitalRead(encoderPinB1))
   {
-    count1 = count1 - 1;
+    countLeft = countLeft + 1;
   }
   else
   {
-    count1 = count1 + 1;
+    countLeft = countLeft - 1;
   }
 }
 
@@ -18,11 +114,11 @@ void readEncoder2(){
 
   if(digitalRead(encoderPinA2) == digitalRead(encoderPinB2))
   {
-    count2 = count2 + 1;
+    countRight = countRight - 1;
   }
   else
   {
-    count2 = count2 - 1;
+    countRight = countRight + 1;
   }
 }
 
@@ -38,73 +134,17 @@ void displayCounts(){
 }
 
 
-void driveForward(int leftSpeed, int rightSpeed){
+void driveForward(double leftSpeed, double rightSpeed){
 
   /* drives both motors with the desire speed (without PID)*/
 
-  digitalWrite(cw_left, LOW);
-  digitalWrite(ccw_left, HIGH);
+  digitalWrite(cw_left, HIGH);
+  digitalWrite(ccw_left, LOW);
   analogWrite(pwm_left, leftSpeed);
 
-  digitalWrite(cw_right, HIGH);
-  digitalWrite(ccw_right, LOW);
+  digitalWrite(cw_right, LOW);
+  digitalWrite(ccw_right, HIGH);
   analogWrite(pwm_right, rightSpeed);
-}
-
-
-void pidController(){
-  /* output: required bits (volts) to the motors
-           : bit_right and bit_left in the range of 0 to 255
-   */
-  float Kp1 = 2.07, Ki1 = 1.24, Kd1 = 1.34;
-  float Kp2 = 9.98, Ki2 = 0.0, Kd2 = 0.39;
-
-  now_time = millis();
-
-   // from count to angle of the rotation of the wheels
-  float angle_left = (360.0/666.0) * countLeft;
-  float angle_right = (360.0/666.0) * countRight;
-
-  // from degree to radian conversion
-  float radian_left = angle_left * (PI/180.0);
-  float radian_right = angle_right * (PI/180.0);
-
-  unsigned long dt = now_time - prv_time;
-
-  // angular velocity = d(angle) / dt --> unit = rad/s
-  actual_velo_left = (radian_left - prv_radian_left) /
-  //                       -------------------------------
-                                (double)(dt * 0.001);
-
-  actual_velo_right =  (radian_right - prv_radian_right) /
- //                       ----------------------------------
-                                  (double)(dt * 0.001);
-
-  float error_left = desire_speed - actual_velo_left;
-  float error_right = desire_speed - actual_velo_right;
-
-  float volt_left = (Kp1*error_left) +
-                    (Ki1*(error_left+prv_error_left))+
-                    (Kd1*(error_left-prv_error_left))
-
-
-  float volt_right = (Kp1*error_right) +
-                     (Ki1*(error_right + prv_error_right)) +
-                     (Kd1*(error_right - prv_error_right))
-
-  bit_left = (volt_left / 12.0) * 255;
-  bit_left = constrain(bit_left, 0, 255);
-
-  bit_right = (volt_right / 12.0) * 255;
-  bit_right = constrain(bit_right, 0, 255);
-
-  prv_error_left = error_left;
-  prv_error_right = error_right;
-
-  prv_radian_left = radian_left;
-  prv_radian_right = radian_right;
-
-  prv_time = now_time;
 }
 
 
@@ -116,3 +156,75 @@ void goStraight(){
   pidController();
   driveForward(bit_left, bit_right);
 }
+
+/*
+void pidLib(){
+
+  now_time = millis();
+
+  angle_left = (360.0/660.0) * countLeft; //check both speeds again.
+  angle_right = (360.0/660.0) * countRight;
+
+
+
+  // from degree to radian conversion
+  radian_left = angle_left * (PI/180.0);
+  radian_right = angle_right * (PI/180.0);
+
+
+
+  dt = now_time - prv_time; // dt is fine
+
+
+
+  // angular velocity = d(angle) / dt --> unit = rad/s
+  actual_velo_left = (radian_left - prv_radian_left)  / (dt*0.001);
+  actual_velo_right =  (radian_right - prv_radian_right)   / (dt * 0.001);
+
+  Input = actual_velo_left;
+  // Input1 = actual_velo_right;
+
+  Setpoint = desire_speed;
+  // Setpoint1 = desire_speed;
+
+  leftPID.Compute();
+  // rightPID.Compute();
+
+
+  driveForward(bit_left, 0);
+
+  // Without serial the motors don't operate
+  // Serial.print("Desire Speed: ");
+  // Serial.print(dt);
+  // Serial.print(" rad/s");
+  // Serial.print("  ");
+  // Serial.print("Left Motor: ");
+  // Serial.print(actual_velo_left);
+  // Serial.print(" rad/s");
+  // Serial.print(" || ");
+  // Serial.print("Right Motor: ");
+  // Serial.print(actual_velo_right);
+  // Serial.println(" rad/s");
+
+  Serial.print("Desire Speed: ");
+  Serial.print(desire_speed);
+  Serial.print(" rad/s");
+  Serial.print("  ");
+  Serial.print("Left Motor: ");
+  Serial.print(bit_left);
+  Serial.print(" pwm");
+  Serial.print(" || ");
+  Serial.print("Right Motor: ");
+  Serial.print(bit_right);
+  Serial.println(" pwm");
+
+
+
+
+  prv_radian_left = radian_left;
+  prv_radian_right = radian_right;
+
+
+  prv_time = now_time;
+}
+*/

@@ -16,5 +16,5 @@ void getSonar(){
   if(dist_right >= 1 && dist_right <= 3){sonarRight = 1;}
   else{sonarRight = 0;}
 
-  sonarData = {sonarLeft, sonarFront, sonarRight};
+  // sonarData = {sonarLeft, sonarFront, sonarRight};
 }
