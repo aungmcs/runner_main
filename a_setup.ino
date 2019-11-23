@@ -36,4 +36,12 @@ void setup(){
 // digitalWrite(S0_B,HIGH);
 // digitalWrite(S1_B,LOW);
 
+//---------------------------------------------------
+
+//compass
+  Wire.begin();
+
+  /* Initialise the module */
+  Init_HMC5883L();
+
 }

@@ -3,9 +3,9 @@ void getSonar(){
     this func gets distance from the three ultrasonic sensors and
     convert it into boolean values based on the distance threshold
   */
-  unsigned int dist_left = sonar[0].ping_cm();
-  unsigned int dist_front = sonar[1].ping_cm();
-  unsigned int dist_right = sonar[2].ping_cm();
+  dist_left = sonar[0].ping_cm();
+  dist_front = sonar[1].ping_cm();
+  dist_right = sonar[2].ping_cm();
 
   if(dist_left >= 1 && dist_left <= 3){sonarLeft = 1;}
   else{sonarLeft = 0;}
@@ -17,4 +17,18 @@ void getSonar(){
   else{sonarRight = 0;}
 
   // sonarData = {sonarLeft, sonarFront, sonarRight};
+}
+
+
+void sonarGuided(){
+  dist_error = dist_left - dist_right;
+  sonar_pid = 0.8 * dist_error;
+
+  // left veering scenerio
+  if (sonar_pid < 0){
+    desire_right_speed = desire_speed - (-1.0*sonar_pid);
+  }
+  else if (sonar_pid > 0){
+    desire_left_speed = desire_speed - sonar_pid;
+  }
 }

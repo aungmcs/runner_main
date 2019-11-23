@@ -35,10 +35,14 @@ void pidController(){
    actual_velo_left = (radian_left - prv_radian_left)   / (double)(dt*0.001);
    actual_velo_right =  (radian_right - prv_radian_right)  / (double)(dt*0.001);
 
+   getSonar();
+   sonarGuided();
 
-   error_left = desire_speed - actual_velo_left;
-   error_right = desire_speed - actual_velo_right;
+   // error_left = desire_speed - actual_velo_left;
+   // error_right = desire_speed - actual_velo_right;
 
+   error_left = desire_left_speed - actual_velo_left;
+   error_right = desire_right_speed - actual_velo_right;
 
 
    volt_left = (Kp1*error_left) + (Ki1*(error_left + prv_error_left))+ (Kd1*(error_left - prv_error_left));
@@ -146,85 +150,3 @@ void driveForward(double leftSpeed, double rightSpeed){
   digitalWrite(ccw_right, HIGH);
   analogWrite(pwm_right, rightSpeed);
 }
-
-
-void goStraight(){
-  /* driving the robot along a straight path
-     using a pidController
-  */
-
-  pidController();
-  driveForward(bit_left, bit_right);
-}
-
-/*
-void pidLib(){
-
-  now_time = millis();
-
-  angle_left = (360.0/660.0) * countLeft; //check both speeds again.
-  angle_right = (360.0/660.0) * countRight;
-
-
-
-  // from degree to radian conversion
-  radian_left = angle_left * (PI/180.0);
-  radian_right = angle_right * (PI/180.0);
-
-
-
-  dt = now_time - prv_time; // dt is fine
-
-
-
-  // angular velocity = d(angle) / dt --> unit = rad/s
-  actual_velo_left = (radian_left - prv_radian_left)  / (dt*0.001);
-  actual_velo_right =  (radian_right - prv_radian_right)   / (dt * 0.001);
-
-  Input = actual_velo_left;
-  // Input1 = actual_velo_right;
-
-  Setpoint = desire_speed;
-  // Setpoint1 = desire_speed;
-
-  leftPID.Compute();
-  // rightPID.Compute();
-
-
-  driveForward(bit_left, 0);
-
-  // Without serial the motors don't operate
-  // Serial.print("Desire Speed: ");
-  // Serial.print(dt);
-  // Serial.print(" rad/s");
-  // Serial.print("  ");
-  // Serial.print("Left Motor: ");
-  // Serial.print(actual_velo_left);
-  // Serial.print(" rad/s");
-  // Serial.print(" || ");
-  // Serial.print("Right Motor: ");
-  // Serial.print(actual_velo_right);
-  // Serial.println(" rad/s");
-
-  Serial.print("Desire Speed: ");
-  Serial.print(desire_speed);
-  Serial.print(" rad/s");
-  Serial.print("  ");
-  Serial.print("Left Motor: ");
-  Serial.print(bit_left);
-  Serial.print(" pwm");
-  Serial.print(" || ");
-  Serial.print("Right Motor: ");
-  Serial.print(bit_right);
-  Serial.println(" pwm");
-
-
-
-
-  prv_radian_left = radian_left;
-  prv_radian_right = radian_right;
-
-
-  prv_time = now_time;
-}
-*/

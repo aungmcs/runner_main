@@ -24,11 +24,12 @@ double prv_radian_left, prv_radian_right;
 double actual_velo_left, actual_velo_right;
 
 // desire speed of the motor in both wheels (rad/s)
-const double desire_speed = 15.0;
+const double desire_speed = 13.0;
+double desire_left_speed, desire_right_speed;
 
 
-const double Kp1 = 3.20, Ki1 = 0.0, Kd1 = 0.0;
-const double Kp2 = 5.10, Ki2 = 0.0, Kd2 = 0.0;
+const double Kp1 = 3.80, Ki1 = 0.0, Kd1 = 0.0;
+const double Kp2 = 3.80, Ki2 = 0.0, Kd2 = 0.0;
 
 unsigned long now_time, prv_time, dt;
 
@@ -45,6 +46,7 @@ double volt_left;
 double volt_right;
 
 
+
 //--------------------------------------------------------
 
 //ultrasonic pins
@@ -58,7 +60,12 @@ NewPing sonar[SONAR_NUM] = {
 };
 
 bool sonarLeft, sonarRight, sonarFront;
-bool sonarData[] = {0, 0, 0};
+
+double dist_left;
+double dist_front;
+double dist_right;
+double dist_error;
+double sonar_pid;
 
 //--------------------------------------------------------------
 
@@ -72,3 +79,18 @@ bool sonarData[] = {0, 0, 0};
 // int redB = 0;  // red color frequency at the bottom
 // int greenB = 0;  // green ||
 // int blueB= 0; // blue ||
+
+//------------------------------------------------
+
+//compass
+#define HMC5883L_Address 0x1E
+
+/* Register address for the X Y and Z data */
+#define X 3
+#define Y 7
+#define Z 5
+
+float x,y;
+int actual_heading;
+int desire_heading;
+int heading_error;
