@@ -24,7 +24,7 @@ double prv_radian_left, prv_radian_right;
 double actual_velo_left, actual_velo_right;
 
 // desire speed of the motor in both wheels (rad/s)
-const double desire_speed = 13.0;
+const double desire_speed = 10.0;
 double desire_left_speed, desire_right_speed;
 
 
@@ -44,7 +44,20 @@ double error_right;
 
 double volt_left;
 double volt_right;
+//----------//
+// 90 turn
+double desire_angle;
+double left_error, right_error, left_diff_error, right_diff_error;
+double prv_left_error, prv_right_error;
+double Kp_left, Kd_left;
+double Kp_right, Kd_right;
+double leftMotorVolt, rightMotorVolt, leftBit, rightBit;
 
+unsigned long start_timer;
+bool turnComplete = false;
+
+bool shouldTurn = false;
+bool realTurn = false;
 
 
 //--------------------------------------------------------
@@ -66,6 +79,7 @@ double dist_front;
 double dist_right;
 double dist_error;
 double sonar_pid;
+bool sonar_help;
 
 //--------------------------------------------------------------
 

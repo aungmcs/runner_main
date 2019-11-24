@@ -1,10 +1,11 @@
-//----------------------------------------------------//
-//-----------  Go Straight With own PID  -------------//
-//----------------------------------------------------//
+//------------------------------------------------------------------//
+//-----------  Go Straight With PID ultrasonic adied  -------------//
+//-----------------------------------------------------------------//
 
-void pidController(){
-  /* output: required bits (volts) to the motors
-           : bit_right and bit_left in the range of 0 to 255
+void goStraight(bool sonarHelp){
+  /*
+      output: required bits (volts) to the motors
+              bit_right and bit_left in the range of 0 to 255
    */
 
 
@@ -29,41 +30,47 @@ void pidController(){
 
 
    // angular velocity = d(angle) / dt --> unit = rad/s
-   // actual_velo_left = (radian_left - prv_radian_left) * 1000  / dt;
-   // actual_velo_right =  (radian_right - prv_radian_right) * 1000  / dt;
-
    actual_velo_left = (radian_left - prv_radian_left)   / (double)(dt*0.001);
    actual_velo_right =  (radian_right - prv_radian_right)  / (double)(dt*0.001);
 
-   getSonar();
+
+   // get the distance from the walls to the robot in cm
+   // getSonar();
+
+
+   // returns the desire left and right speed based on dist_left - dist_right
    sonarGuided();
 
-   // error_left = desire_speed - actual_velo_left;
-   // error_right = desire_speed - actual_velo_right;
+   if (sonar_help == false){
+     error_left = desire_speed - actual_velo_left;
+     error_right = desire_speed - actual_velo_right;
+   }
 
-   error_left = desire_left_speed - actual_velo_left;
-   error_right = desire_right_speed - actual_velo_right;
+   else if (sonar_help == true){
+     error_left = desire_left_speed - actual_velo_left;
+     error_right = desire_right_speed - actual_velo_right;
+   }
 
 
-   volt_left = (Kp1*error_left) + (Ki1*(error_left + prv_error_left))+ (Kd1*(error_left - prv_error_left));
+
+   volt_left = (Kp1*error_left) +
+               (Ki1*(error_left + prv_error_left))+
+               (Kd1*(error_left - prv_error_left));
 
 
-   volt_right = (Kp2*error_right) + (Ki2*(error_right + prv_error_right)) + (Kd2*(error_right - prv_error_right));
+   volt_right = (Kp2*error_right) +
+                (Ki2*(error_right + prv_error_right)) +
+                (Kd2*(error_right - prv_error_right));
 
 
    bit_left = (volt_left / 12.0) * 255.0;
    bit_left = constrain(bit_left, 0, 255);
-   // if (bit_left > 255.0) { bit_left = 255.0; }
-   // else { bit_left = bit_left; }
 
 
    bit_right = (volt_right / 12.0) * 255.0;
    bit_right = constrain(bit_right, 0, 255);
-   // if (bit_right > 255.0){bit_right = 255.0;}
-   // else{bit_right = bit_right;}
 
 
-   // driveForward(bit_left, bit_right);
    digitalWrite(cw_left, HIGH);
    digitalWrite(ccw_left, LOW);
    analogWrite(pwm_left, bit_left);
@@ -72,15 +79,7 @@ void pidController(){
    digitalWrite(ccw_right, HIGH);
    analogWrite(pwm_right, bit_right);
 
-   // Without serial the motors don't operate
-   // Serial.print("Desire Speed: ");
-   // Serial.print(desire_speed);
-   // Serial.print(" Left Motor: ");
-   // Serial.print(actual_velo_left);
-   // Serial.print(" Right Motor: ");
-   // Serial.println(actual_velo_right);
 
-   // Serial.print("Desire Speed: ");
    Serial.print(desire_speed);
    Serial.print(" ");
    Serial.print(actual_velo_left);
@@ -94,7 +93,7 @@ void pidController(){
    prv_radian_right = radian_right;
 
    prv_error_left = error_left;
-   // prv_error_right = error_right;
+   prv_error_right = error_right;
 
 }
 
@@ -149,4 +148,109 @@ void driveForward(double leftSpeed, double rightSpeed){
   digitalWrite(cw_right, LOW);
   digitalWrite(ccw_right, HIGH);
   analogWrite(pwm_right, rightSpeed);
+}
+
+void turnLeft(){
+
+
+
+  desire_angle = 270.0;
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.02;
+  Kd_left = 0.025;
+
+
+  Kp_right = 0.02;
+  Kd_right = 0.04;
+
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+
+  leftMotorVolt = Kp_left *( left_error ) + Kd_left *( left_diff_error );
+  rightMotorVolt = Kp_right *( right_error ) + Kd_right *( right_diff_error );
+
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)*255;
+
+
+
+  leftBit = constrain (leftBit,0,255);
+  rightBit = constrain (rightBit,0,255);
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+
+  }
+
+  else{
+
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right,HIGH);
+    analogWrite (pwm_right,rightBit);
+
+  }
+
+  else{
+
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+
+
+}
+
+void resetCounts(){
+  // digitalWrite(cw_left, LOW);
+  // digitalWrite(ccw_left, LOW);
+  // analogWrite(pwm_left, 0.0);
+  //
+  // digitalWrite(cw_right, LOW);
+  // digitalWrite(ccw_right, LOW);
+  // analogWrite(pwm_right, 0.0);
+
+  countLeft = 0.0;
+  countRight = 0.0;
 }
