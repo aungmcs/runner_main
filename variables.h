@@ -14,6 +14,8 @@
 #define encoderPinA2 19
 #define encoderPinB2 23
 
+Servo myServo;
+
 volatile float countLeft, countRight;
 
 // bits produced from pidController()
