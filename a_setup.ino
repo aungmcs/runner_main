@@ -24,24 +24,39 @@ void setup(){
 //ultrasonic --> not needed
 //--------------------------------------------------------------------
 
-// //bottom color sensor  pins
-// pinMode(S0_B, OUTPUT);
-// pinMode(S1_B, OUTPUT);
-// pinMode(S2_B, OUTPUT);
-// pinMode(S3_B, OUTPUT);
-//
-// // Setting the sensorOut as an input
-// pinMode(color_base_output, INPUT);
-// // Setting frequency scaling to 20%
-// digitalWrite(S0_B,HIGH);
-// digitalWrite(S1_B,LOW);
+//bottom color sensor  pins
+pinMode(S0_B, OUTPUT);
+pinMode(S1_B, OUTPUT);
+pinMode(S2_B, OUTPUT);
+pinMode(S3_B, OUTPUT);
+
+// Setting the sensorOut as an input
+pinMode(color_base_output, INPUT);
+// Setting frequency scaling to 20%
+digitalWrite(S0_B,HIGH);
+digitalWrite(S1_B,LOW);
 
 //---------------------------------------------------
 
-//compass
-  Wire.begin();
+// //compass
+//   Wire.begin();
 
-  /* Initialise the module */
-  Init_HMC5883L();
+//   /* Initialise the module */
+//   Init_HMC5883L();
 
+ 
+  //Stepper
+
+  pinMode (stp,OUTPUT);
+  pinMode (dir,OUTPUT);
+  pinMode (ms0,OUTPUT);
+  pinMode (ms1,OUTPUT);
+  pinMode (ms2, OUTPUT);
+
+  digitalWrite(stp,LOW);
+  digitalWrite(ms0,HIGH);
+  digitalWrite(ms1,HIGH);
+  digitalWrite(ms2,LOW);
+
+  myServo.attach(10);
 }
