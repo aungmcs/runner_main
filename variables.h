@@ -84,16 +84,38 @@ bool sonar_help;
 //--------------------------------------------------------------
 
 //color sensor at the bottom
-// #define S1_B 28
-// #define S0_B 29
-// #define S3_B 26
-// #define S2_B 25
-// #define color_base_output 24
-//
-// int redB = 0;  // red color frequency at the bottom
-// int greenB = 0;  // green ||
-// int blueB= 0; // blue ||
+#define S0_B 53
+#define S1_B 52
+#define S2_B 51
+#define S3_B 50
+#define color_base_output 49
 
+int redFrequency = 0;
+int greenFrequency = 0;
+int blueFrequency = 0;
+
+int redColor = 0;
+int greenColor = 0;
+int blueColor = 0;
+
+int color_Output = 5;
+
+//color sensor at the top
+// #define S0_T 47
+// #define S1_T 46
+// #define S2_T 45
+// #define S3_T 44
+// #define color_top_output 48
+
+// int redFrequencyT = 0;
+// int greenFrequencyT = 0;
+// int blueFrequencyT = 0;
+//
+// int redColorT = 0;
+// int greenColorT = 0;
+// int blueColorT = 0;
+
+int color_OutputT = 5;
 //------------------------------------------------
 
 //compass
@@ -108,3 +130,12 @@ float x,y;
 int actual_heading;
 int desire_heading;
 int heading_error;
+
+//-------------------Stepper----------------------//
+#define stp 36
+#define dir 37
+#define ms0 38
+#define ms1 39
+#define ms2 40
+
+int i;
