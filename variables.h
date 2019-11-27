@@ -14,6 +14,8 @@
 #define encoderPinA2 19
 #define encoderPinB2 23
 
+Servo myServo;
+
 volatile float countLeft, countRight;
 
 // bits produced from pidController()
@@ -108,3 +110,12 @@ float x,y;
 int actual_heading;
 int desire_heading;
 int heading_error;
+
+//-------------------Stepper----------------------//
+#define stp 36
+#define dir 37
+#define ms0 38
+#define ms1 39
+#define ms2 40
+
+int i;
