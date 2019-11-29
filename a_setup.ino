@@ -38,10 +38,10 @@ void setup(){
 
 //---------------------------------------------------
 
-//compass
-  Wire.begin();
-
-  /* Initialise the module */
-  Init_HMC5883L();
+// //compass
+//   Wire.begin();
+//
+//   /* Initialise the module */
+//   Init_HMC5883L();
 
 }

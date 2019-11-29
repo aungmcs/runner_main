@@ -1,5 +1,5 @@
 //------------------------------------------------------------------//
-//-----------  Go Straight With PID ultrasonic adied  -------------//
+//-----------  Go Straight With PID ultrasonic aided  -------------//
 //-----------------------------------------------------------------//
 
 void goStraight(bool sonarHelp){
@@ -10,7 +10,6 @@ void goStraight(bool sonarHelp){
 
 
    now_time = millis();
-
 
 
     // from count to angle of the rotation of the wheels
@@ -24,9 +23,7 @@ void goStraight(bool sonarHelp){
    radian_right = angle_right * (PI/180.0);
 
 
-
    dt = now_time - prv_time; // dt is fine
-
 
 
    // angular velocity = d(angle) / dt --> unit = rad/s
@@ -34,19 +31,15 @@ void goStraight(bool sonarHelp){
    actual_velo_right =  (radian_right - prv_radian_right)  / (double)(dt*0.001);
 
 
-   // get the distance from the walls to the robot in cm
-   // getSonar();
-
-
    // returns the desire left and right speed based on dist_left - dist_right
    sonarGuided();
 
-   if (sonar_help == false){
+   if (sonarHelp == false){
      error_left = desire_speed - actual_velo_left;
      error_right = desire_speed - actual_velo_right;
    }
 
-   else if (sonar_help == true){
+   else if (sonarHelp == true){
      error_left = desire_left_speed - actual_velo_left;
      error_right = desire_right_speed - actual_velo_right;
    }
@@ -70,14 +63,47 @@ void goStraight(bool sonarHelp){
    bit_right = (volt_right / 12.0) * 255.0;
    bit_right = constrain(bit_right, 0, 255);
 
+   //-----------------------------------------
 
-   digitalWrite(cw_left, HIGH);
-   digitalWrite(ccw_left, LOW);
+   // close to right
+   if (dist_frontRight > 0.00 && dist_frontRight < 6.00 ){
+     //reverse left motor dir
+     digitalWrite (cw_left,LOW);
+     digitalWrite (ccw_left,HIGH);
+     digitalWrite(cw_right, LOW);
+     digitalWrite(ccw_right, HIGH);
+
+
+   } else if ( dist_frontLeft > 0.00 && dist_frontLeft < 6.00 ){
+        //reverse right motor dir
+      digitalWrite(cw_left, HIGH);
+      digitalWrite(ccw_left, LOW);
+      digitalWrite (cw_right,HIGH);
+      digitalWrite (ccw_right,LOW);
+
+   }else{
+     //straight
+    digitalWrite(cw_left, HIGH);
+    digitalWrite(ccw_left, LOW);
+    digitalWrite(cw_right, LOW);
+    digitalWrite(ccw_right, HIGH);
+
+   }
+
    analogWrite(pwm_left, bit_left);
-
-   digitalWrite(cw_right, LOW);
-   digitalWrite(ccw_right, HIGH);
    analogWrite(pwm_right, bit_right);
+
+//----------------------------
+
+
+   // digitalWrite(cw_left, HIGH);
+   // digitalWrite(ccw_left, LOW);
+   // analogWrite(pwm_left, bit_left);
+
+   // digitalWrite(cw_right, LOW);
+   // digitalWrite(ccw_right, HIGH);
+   // analogWrite(pwm_right, bit_right);
+
 
 
    Serial.print(desire_speed);
@@ -94,6 +120,102 @@ void goStraight(bool sonarHelp){
 
    prv_error_left = error_left;
    prv_error_right = error_right;
+
+}
+
+
+void turnLeft(){
+
+  desire_angle = 270.0;
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.02;
+  Kd_left = 0.025;
+
+
+  Kp_right = 0.02;
+  Kd_right = 0.04;
+  //
+  // Kp_left = 0.009;
+  // Kd_left = 0.07;
+  // Ki_left = 0.0001;
+  //
+  //
+  // Kp_right = 0.009;
+  // Kd_right = 0.07;
+  // Ki_right = 0.0001;
+
+
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+
+  leftMotorVolt = (Kp_left * left_error) + (Kd_left * left_diff_error) + (Ki_left * (left_error + prv_left_error));
+  rightMotorVolt = (Kp_right * right_error) + (Kd_right * right_diff_error) + (Ki_right * (right_error + prv_right_error));
+
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+
+
+
+  leftBit = constrain (leftBit,0,255);
+  rightBit = constrain (rightBit,0,255);
+
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+  }else{
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right,HIGH);
+    analogWrite (pwm_right,rightBit);
+  }else{
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+// Serial.print (angle_left);
+// Serial.print(" ");
+// Serial.print (Kd_left *( left_diff_error ));
+// Serial.print(" ");
+// Serial.println(angle_right);
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+
 
 }
 
@@ -150,107 +272,21 @@ void driveForward(double leftSpeed, double rightSpeed){
   analogWrite(pwm_right, rightSpeed);
 }
 
-void turnLeft(){
 
 
-
-  desire_angle = 270.0;
-
-  //Angle Travelled
-  angle_left = (360.0/660.0) * abs( countLeft );
-  angle_right = (360.0/660.0) * abs ( countRight );
-
-
-  //PID Calculations for left and right motors
-  left_error = desire_angle - angle_left;
-  right_error = desire_angle - angle_right;
-
-
-  Kp_left = 0.02;
-  Kd_left = 0.025;
-
-
-  Kp_right = 0.02;
-  Kd_right = 0.04;
-
-
-
-  left_diff_error = (left_error - prv_left_error);
-  right_diff_error = (right_error - prv_right_error);
-
-
-
-  leftMotorVolt = Kp_left *( left_error ) + Kd_left *( left_diff_error );
-  rightMotorVolt = Kp_right *( right_error ) + Kd_right *( right_diff_error );
-
-
-
-  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
-  rightBit = (abs(rightMotorVolt) / 12.0)*255;
-
-
-
-  leftBit = constrain (leftBit,0,255);
-  rightBit = constrain (rightBit,0,255);
-
-
-  //Turn both motors to position
-  if ( left_error > 0 ){
-
-    digitalWrite (cw_left,LOW);
-    digitalWrite (ccw_left,HIGH);
-    analogWrite (pwm_left,leftBit);
-
-  }
-
-  else{
-
-    digitalWrite (cw_left,HIGH);
-    digitalWrite (ccw_left,LOW);
-    analogWrite (pwm_left,leftBit);
-  }
-
-  if ( right_error > 0 ){
-
-    digitalWrite (cw_right,LOW);
-    digitalWrite (ccw_right,HIGH);
-    analogWrite (pwm_right,rightBit);
-
-  }
-
-  else{
-
-    digitalWrite (cw_right,HIGH);
-    digitalWrite (ccw_right,LOW);
-    analogWrite (pwm_right,rightBit);
-
-  }
-
-
-
-Serial.print (left_error);
-Serial.print(" ");
-Serial.print (Kd_left *( left_diff_error ));
-Serial.print(" ");
-Serial.println(right_error);
-
-
-
-prv_left_error = left_error;
-prv_right_error = right_error;
-
-
-}
 
 void resetCounts(){
-  // digitalWrite(cw_left, LOW);
-  // digitalWrite(ccw_left, LOW);
-  // analogWrite(pwm_left, 0.0);
-  //
-  // digitalWrite(cw_right, LOW);
-  // digitalWrite(ccw_right, LOW);
-  // analogWrite(pwm_right, 0.0);
-
   countLeft = 0.0;
   countRight = 0.0;
+}
+
+void stop(){
+  digitalWrite(cw_left, LOW);
+  digitalWrite(ccw_left, HIGH);
+  analogWrite(pwm_left, 10);
+
+  digitalWrite(cw_right, HIGH);
+  digitalWrite(ccw_right, LOW);
+  analogWrite(pwm_right, 10);
+
 }
