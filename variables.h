@@ -54,7 +54,8 @@ double Kp_right, Kd_right, Ki_right;
 double leftMotorVolt, rightMotorVolt, leftBit, rightBit;
 
 unsigned long time_now, prvTm;
-bool turn = false;
+bool turncomplete = false;
+bool start_turn = false;
 
 bool shouldTurn = false;
 bool realTurn = false;
@@ -71,13 +72,13 @@ NewPing sonar[SONAR_NUM] = {
   NewPing(29,28,MAX_DISTANCE),//left,
   NewPing(43,42,MAX_DISTANCE),//front,
   NewPing(53,52,MAX_DISTANCE),//right
-  NewPing(51,50,MAX_DISTANCE),//front right
+  NewPing(15,14,MAX_DISTANCE),//front right
   NewPing(31,30,MAX_DISTANCE)//front left
 };
 
 bool sonarLeft, sonarRight, sonarFront;
 
-double dFl, dFr;
+double dFl, dFr, prv_dFr;
 double dist_frontLeft, dist_frontRight;
 
 double dist_left;

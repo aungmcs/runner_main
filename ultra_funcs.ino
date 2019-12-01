@@ -9,16 +9,17 @@ void getSonar(){
   dFr = sonar[3].ping_cm(); // front right
   dFl = sonar[4].ping_cm(); // front left
 
+
 //--------------------------------------------
 // sensor values filtration and walls detection
 //----------------------------------------------
 
 // left
-  if(dL > 0.00 && dL < 8.00){
+  if(dL > 0.00 && dL < 10.00){
     sonarLeft = true;
     dist_left = dL;
 
-  }else if (dL >= 8.00){
+  }else if (dL >= 10.00){
     sonarLeft = false;
     dist_left = 0.00;
   }
@@ -68,6 +69,7 @@ void getSonar(){
   }
 //---------------------------------------
 
+  prv_dFr = dFr;
 }
 
 
