@@ -14,6 +14,8 @@
 #define encoderPinA2 19
 #define encoderPinB2 23
 
+Servo myServo;
+
 volatile float countLeft, countRight;
 
 // bits produced from pidController()
@@ -92,30 +94,65 @@ bool sonar_help;
 double dL, dR, dF;
 double prv_dR, prv_dL, prv_dF;
 
-//--------------------------------------------------------------
+//----------------------------------------------------
 
 //color sensor at the bottom
-// #define S1_B 28
-// #define S0_B 29
-// #define S3_B 26
-// #define S2_B 25
-// #define color_base_output 24
-//
-// int redB = 0;  // red color frequency at the bottom
-// int greenB = 0;  // green ||
-// int blueB= 0; // blue ||
+#define S0_B 47
+#define S1_B 46
+#define S2_B 45
+#define S3_B 44
+#define color_base_output 48
 
-//------------------------------------------------
+int redFrequency = 0;
+int greenFrequency = 0;
+int blueFrequency = 0;
+
+int redColor = 0, rColor = 0;
+int greenColor = 0, gColor = 0;
+int blueColor = 0;
+
+int currentColor=0;
+int prvColor = 5;
+
+int color_Output = 0;
+
+// color sensor at the top
+#define S0_T 16
+#define S1_T 17
+#define S2_T 24
+#define S3_T 25
+#define color_top_output 27
+
+int redFrequencyT = 0;
+int greenFrequencyT = 0;
+int blueFrequencyT = 0;
+
+int redColorT = 0;
+int greenColorT = 0;
+int blueColorT = 0;
+
+int color_OutputT;
 
 //compass
-// #define HMC5883L_Address 0x1E
-//
-// /* Register address for the X Y and Z data */
-// #define X 3
-// #define Y 7
-// #define Z 5
-//
-// float x,y;
-// int actual_heading;
-// int desire_heading;
-// int heading_error;
+#define HMC5883L_Address 0x1E
+
+/* Register address for the X Y and Z data */
+#define X 3
+#define Y 7
+#define Z 5
+
+float x,y;
+int actual_heading;
+int desire_heading;
+int heading_error;
+
+//-------------------Stepper----------------------//
+#define stp 51
+#define dir 49
+#define ms0 33
+#define ms1 35
+#define ms2 37
+
+int i;
+
+bool sorting = false;

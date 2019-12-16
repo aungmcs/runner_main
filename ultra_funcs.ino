@@ -37,11 +37,11 @@ void getSonar(){
 //--------------
 
 // front
-  if(dF > 0.00 && dF <= 4.00){
+  if(dF > 0.00 && dF <= 6.00){
     sonarFront = true;
     dist_front = dF;
 
-  }else if (dF > 4.00){
+  }else if (dF > 6.00){
     sonarFront = false;
     dist_front = dF;
   }
