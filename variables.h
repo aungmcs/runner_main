@@ -26,7 +26,7 @@ double prv_radian_left, prv_radian_right;
 double actual_velo_left, actual_velo_right;
 
 // desire speed of the motor in both wheels (rad/s)
-const double desire_speed = 8.00;
+const double desire_speed = 8.00;//8.00
 double desire_left_speed, desire_right_speed;
 
 
@@ -117,11 +117,11 @@ int prvColor = 5;
 int color_Output = 0;
 
 // color sensor at the top
-#define S0_T 16
-#define S1_T 17
-#define S2_T 24
-#define S3_T 25
-#define color_top_output 27
+#define S0_T 27
+#define S1_T 26
+#define S2_T 25
+#define S3_T 24
+#define color_top_output 40
 
 int redFrequencyT = 0;
 int greenFrequencyT = 0;
@@ -155,4 +155,15 @@ int heading_error;
 
 int i;
 
-bool sorting = false;
+bool colorDetected = false;
+bool straightColor = false;
+int detectedColor = 0;
+bool blue = false;
+bool blueT = false;
+bool black = false;
+bool green = false;
+bool greenT = false;
+bool yellow = false;
+bool yellowT = false;
+bool brown = false;
+bool brownT = false;

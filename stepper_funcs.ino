@@ -1,12 +1,10 @@
 
 void runStepper (float degree, char direct) //Run 45 degrees turns every 1 second
 {
-  if ( direct == 'C' )
-  {
+  if ( direct == 'C' ){
     digitalWrite(dir,HIGH);
-  }
-  else if ( direct == 'A' )
-  {
+
+  }else if ( direct == 'A' ){
     digitalWrite(dir,LOW);
   }
 

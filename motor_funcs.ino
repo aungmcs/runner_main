@@ -63,14 +63,14 @@ void move(char decision){
 //             45 degree ultrasonics come in
 //=========================================================
 
-if ( dist_frontLeft > 0.00 && dist_frontLeft < 6.00 ){
+if ( dFl > 0.00 && dFl < 6.00 ){
  //reverse right motor dir
  digitalWrite(cw_left, HIGH);
  digitalWrite(ccw_left, LOW);
  digitalWrite (cw_right,HIGH);
  digitalWrite (ccw_right,LOW);
 
-} else if (dist_frontRight > 0.00 && dist_frontRight < 6.00){
+} else if (dFr > 0.00 && dFr < 6.00){
  //reverse left motor dir
  digitalWrite (cw_left,LOW);
  digitalWrite (ccw_left,HIGH);
@@ -78,7 +78,7 @@ if ( dist_frontLeft > 0.00 && dist_frontLeft < 6.00 ){
  digitalWrite(ccw_right, HIGH);
 
 
-} else if ((dist_frontLeft > 0.00 && dist_frontLeft < 6.00) && (dist_frontRight > 0.00 && dist_frontRight < 6.00)){
+} else if ((dFl > 0.00 && dFl < 6.00) && (dFr > 0.00 && dFr < 6.00)){
   //in dead end
   digitalWrite(cw_left, HIGH);
   digitalWrite(ccw_left, LOW);
@@ -135,6 +135,7 @@ if (dF >= 6){
 
 }
 
+
 void turnLeft(){
 
   desire_angle = 270.0;
@@ -149,12 +150,12 @@ void turnLeft(){
   right_error = desire_angle - angle_right;
 
 
-  Kp_left = 0.04; //0.02
-  Kd_left = 0.025;
+  Kp_left = 0.04; //0.02//0.04
+  Kd_left = 0.025; //0.025
 
 
-  Kp_right = 0.04; //0.02
-  Kd_right = 0.04;
+  Kp_right = 0.04; //0.02//0.04
+  Kd_right = 0.04;//0.04
   //
   // Kp_left = 0.009;
   // Kd_left = 0.07;
@@ -178,13 +179,13 @@ void turnLeft(){
 
 
 
-  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
-  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255; //12.0
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;//12.0
 
 
 
-  leftBit = constrain (leftBit,0,255);
-  rightBit = constrain (rightBit,0,255);
+  leftBit = constrain (leftBit,0,255);//255
+  rightBit = constrain (rightBit,0,255);//255
 
 
 
@@ -340,11 +341,11 @@ void turnRight(){
   right_error = desire_angle - angle_right;
 
 
-  Kp_left = 0.04; //0.02
+  Kp_left = 0.04; //0.02//0.04
   Kd_left = 0.025;
 
 
-  Kp_right = 0.04; //0.02
+  Kp_right = 0.04; //0.02//0.04
   Kd_right = 0.04;
 
 
@@ -801,11 +802,11 @@ void go6inches(){
   right_error = desire_angle - angle_right;
 
 
-  Kp_left = 0.07; //0.026
+  Kp_left = 0.2;  //0.07
   Kd_left = 0.0; //0.0
 
 
-  Kp_right = 0.07; //0.026
+  Kp_right = 0.2; //0.07
   Kd_right = 0.0; //0.0
 
 
@@ -865,6 +866,240 @@ prv_left_error = left_error;
 prv_right_error = right_error;
 
 }
+
+
+void go5inches(){
+  desire_angle = 200.00;    //500
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.06; //0.026
+  Kd_left = 0.0; //0.0
+
+
+  Kp_right = 0.06; //0.026
+  Kd_right = 0.0; //0.0
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+  leftMotorVolt = (Kp_left * left_error) + (Kd_left * left_diff_error) + (Ki_left * (left_error + prv_left_error));
+  rightMotorVolt = (Kp_right * right_error) + (Kd_right * right_diff_error) + (Ki_right * (right_error + prv_right_error));
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+
+
+  leftBit = constrain (leftBit,0,50);
+  rightBit = constrain (rightBit,0,50);
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }else{
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right, HIGH);
+    analogWrite (pwm_right,rightBit);
+  }else{
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+// Serial.print (angle_left);
+// Serial.print(" ");
+// Serial.print (Kd_left *( left_diff_error ));
+// Serial.print(" ");
+// Serial.println(angle_right);
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+}
+
+
+void go2inches(){
+  desire_angle = 82.00;    //500
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.03; //0.026
+  Kd_left = 0.0; //0.0
+
+
+  Kp_right = 0.03; //0.026
+  Kd_right = 0.0; //0.0
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+  leftMotorVolt = (Kp_left * left_error) + (Kd_left * left_diff_error) + (Ki_left * (left_error + prv_left_error));
+  rightMotorVolt = (Kp_right * right_error) + (Kd_right * right_diff_error) + (Ki_right * (right_error + prv_right_error));
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+
+
+  leftBit = constrain (leftBit,0,50);
+  rightBit = constrain (rightBit,0,50);
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }else{
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right, HIGH);
+    analogWrite (pwm_right,rightBit);
+  }else{
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+// Serial.print (angle_left);
+// Serial.print(" ");
+// Serial.print (Kd_left *( left_diff_error ));
+// Serial.print(" ");
+// Serial.println(angle_right);
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+}
+
+void go4inches(){
+  desire_angle = 164.00;    //500
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.05; //0.026
+  Kd_left = 0.0; //0.0
+
+
+  Kp_right = 0.05; //0.026
+  Kd_right = 0.0; //0.0
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+  leftMotorVolt = (Kp_left * left_error) + (Kd_left * left_diff_error) + (Ki_left * (left_error + prv_left_error));
+  rightMotorVolt = (Kp_right * right_error) + (Kd_right * right_diff_error) + (Ki_right * (right_error + prv_right_error));
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+
+
+  leftBit = constrain (leftBit,0,50);
+  rightBit = constrain (rightBit,0,50);
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }else{
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right, HIGH);
+    analogWrite (pwm_right,rightBit);
+  }else{
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+// Serial.print (angle_left);
+// Serial.print(" ");
+// Serial.print (Kd_left *( left_diff_error ));
+// Serial.print(" ");
+// Serial.println(angle_right);
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+}
+
 
 void go1feet(){
   desire_angle = 492.00;    //500
@@ -944,6 +1179,83 @@ prv_right_error = right_error;
 
 }
 
+void stop(){
+  desire_angle = 0.00;    //500
+
+  //Angle Travelled
+  angle_left = (360.0/660.0) * abs( countLeft );
+  angle_right = (360.0/660.0) * abs ( countRight );
+
+
+  //PID Calculations for left and right motors
+  left_error = desire_angle - angle_left;
+  right_error = desire_angle - angle_right;
+
+
+  Kp_left = 0.07; //0.026
+  Kd_left = 0.0; //0.0
+
+
+  Kp_right = 0.07; //0.026
+  Kd_right = 0.0; //0.0
+
+
+  left_diff_error = (left_error - prv_left_error);
+  right_diff_error = (right_error - prv_right_error);
+
+
+  leftMotorVolt = (Kp_left * left_error) + (Kd_left * left_diff_error) + (Ki_left * (left_error + prv_left_error));
+  rightMotorVolt = (Kp_right * right_error) + (Kd_right * right_diff_error) + (Ki_right * (right_error + prv_right_error));
+
+
+  leftBit = (abs(leftMotorVolt) / 12.0) * 255;
+  rightBit = (abs(rightMotorVolt) / 12.0)* 255;
+
+
+  leftBit = constrain (leftBit,0,50);
+  rightBit = constrain (rightBit,0,50);
+
+
+  //Turn both motors to position
+  if ( left_error > 0 ){
+    digitalWrite (cw_left,HIGH);
+    digitalWrite (ccw_left,LOW);
+    analogWrite (pwm_left,leftBit);
+  }else{
+    digitalWrite (cw_left,LOW);
+    digitalWrite (ccw_left,HIGH);
+    analogWrite (pwm_left,leftBit);
+  }
+
+  if ( right_error > 0 ){
+    digitalWrite (cw_right,LOW);
+    digitalWrite (ccw_right, HIGH);
+    analogWrite (pwm_right,rightBit);
+  }else{
+    digitalWrite (cw_right,HIGH);
+    digitalWrite (ccw_right,LOW);
+    analogWrite (pwm_right,rightBit);
+  }
+
+
+
+Serial.print (left_error);
+Serial.print(" ");
+Serial.print (Kd_left *( left_diff_error ));
+Serial.print(" ");
+Serial.println(right_error);
+
+
+// Serial.print (angle_left);
+// Serial.print(" ");
+// Serial.print (Kd_left *( left_diff_error ));
+// Serial.print(" ");
+// Serial.println(angle_right);
+
+prv_left_error = left_error;
+prv_right_error = right_error;
+}
+
 
 void go7inches(){
   desire_angle = 289.00;
@@ -958,11 +1270,11 @@ void go7inches(){
   right_error = desire_angle - angle_right;
 
 
-  Kp_left = 0.071;
+  Kp_left = 0.25; //0.071
   Kd_left = 0.0;
 
 
-  Kp_right = 0.071;
+  Kp_right = 0.25;
   Kd_right = 0.0;
 
 
@@ -1082,17 +1394,6 @@ void resetCounts(){
 }
 
 
-void stop(){
-  digitalWrite(cw_left, LOW);
-  digitalWrite(ccw_left, HIGH);
-  analogWrite(pwm_left, 10);
-
-  digitalWrite(cw_right, HIGH);
-  digitalWrite(ccw_right, LOW);
-  analogWrite(pwm_right, 10);
-
-}
-
 void turns45(){
   // // 45 turns
   // /*
@@ -1143,6 +1444,7 @@ void turns45(){
   // */
 }
 
+
 void solveMaze(){
 
   getSonar();
@@ -1162,15 +1464,15 @@ void solveMaze(){
 
   if (start_turn == true){
       resetCounts();
-      for (int r = 0; r < 120; r++){
+      for (int r = 0; r < 70; r++){
         go6inches();
       }
       resetCounts();
-      for (int r = 0; r < 120; r++){
+      for (int r = 0; r < 70; r++){
         turnLeft();
       }
       resetCounts();
-      for (int r = 0; r < 120; r++){
+      for (int r = 0; r < 70; r++){
         go7inches();
       }
       start_turn = false;
@@ -1180,13 +1482,501 @@ void solveMaze(){
 
   if (sonarLeft == true && dF < 6.00)
   {
-    for (int r = 0; r < 120; r++){
+    resetCounts();
+    for (int r = 0; r < 70; r++){
       stop();
       }
     delay(500);
     resetCounts();
-    for (int r = 0; r < 120; r++){
+    for (int r = 0; r < 70; r++){
       turnRight();
       }
+  }
+}
+
+
+void followRight(){
+  getSonar();
+
+  if((sonarLeft == true && sonarRight == true) || (sonarRight == true && sonarLeft == false)){
+      // straight = true;
+      start_turn = false;
+      move('s');
+
+  }
+
+//-------------------------------
+
+  if (sonarRight == false){
+    start_turn = true;
+  }
+
+  if (start_turn == true){
+      resetCounts();
+      for (int r = 0; r < 80; r++){
+        go6inches();
+      }
+      resetCounts();
+      for (int r = 0; r < 80; r++){
+        turnRight();
+      }
+      resetCounts();
+      for (int r = 0; r < 80; r++){
+        go7inches();
+      }
+      start_turn = false;
+  }
+
+//-----------------------------------
+
+  if (sonarRight == true && dF < 6.00)
+  {
+    for (int r = 0; r < 70; r++){
+      stop();
+      }
+    delay(500);
+    resetCounts();
+    for (int r = 0; r < 80; r++){
+      turnLeft();
+      }
+  }
+}
+
+
+void perLeft() {
+  getSonar();
+  baseRGB();
+
+  if (color_Output < 5){
+    colorDetected = true;
+
+  }else{
+    colorDetected = false;
+  }
+
+  // left turn scenerio
+  if (colorDetected == true && turncomplete == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    for (int r = 0; r < 2; r++){
+      runStepper(45,'A');
+    }
+    runServo();
+
+    // colorDetected = false;
+  }
+
+  // right turn scenerio
+  // if (straightColor == true && turncomplete == true){
+  //   resetCounts();
+  //   for (int r = 0; r < 70; r++){
+  //     stop();
+  //   }
+  //   for (int r = 0; r < 7; r++){
+  //     runStepper(45,'A');
+  //   }
+  //   runServo();
+  //
+  //   right_turn_done = true;
+  //   // turncomplete = false;
+  //   straightColor = false;
+  // }
+
+  if (color_Output == 5 && straightColor == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    for (int r = 0; r < 1; r++){
+      runStepper(45,'A');
+    }
+    runServo();
+    straightColor = false;
+
+  }
+
+  if((sonarLeft == true && sonarRight == true) || (sonarLeft == true && sonarRight == false)){
+    if (colorDetected == true){
+      straightColor = true;
+
+    }
+    turncomplete = false;
+    start_turn = false;
+    move('s');
+
+  }
+
+  //-------------------------------
+
+  if (sonarLeft == false){
+    turncomplete = false;
+    start_turn = true;
+  }
+
+  if (start_turn == true){
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        go6inches();
+      }
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        turnLeft();
+      }
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        go7inches();
+      }
+      turncomplete = true;
+      start_turn = false;
+  }
+
+  //-----------------------------------
+
+  if (sonarLeft == true && dF < 6.00)
+  {
+    // right_turn_done = false;
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+      }
+    delay(200);
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnRight();
+      }
+
+    // turncomplete = true;
+  }
+
+  if (black == true){
+    resetCounts();
+    for (int r = 0; r < 8; r++){
+      stop();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go2inches();
+    }
+    while(1);
+  }
+
+
+}
+
+void leftie(){
+  getSonar();
+  baseRGBytu();
+
+  if (color_Output < 5){
+    colorDetected = true;
+
+  }else if(color_Output >=5 && color_Output < 8){
+    colorDetected = false;
+  }
+  //-------------------------------------------------------------------
+  // left turn scenerio
+  if (colorDetected == true && turncomplete == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    colorCheck();
+
+  }
+
+  //straight scenerio
+  if (color_Output == 5 && straightColor == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    colorCheck();
+    straightColor = false;
+
+  }
+  //----------------------------------------------------------------------------
+  if((sonarLeft == true && sonarRight == true) || (sonarLeft == true && sonarRight == false)){
+    if (colorDetected == true){
+      straightColor = true;
+    }
+
+    turncomplete = false;
+    start_turn = false;
+    move('s');
+
+  }
+
+  //-------------------------------
+
+  if (sonarLeft == false){
+    turncomplete = false;
+    start_turn = true;
+  }
+
+  if (start_turn == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go6inches();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnLeft();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go7inches();
+    }
+    turncomplete = true;
+    start_turn = false;
+  }
+
+  //-----------------------------------
+
+  if (sonarLeft == true && dF < 6.00)
+  {
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+      }
+    // delay(200);//////////////////////
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnRight();
+      }
+  }
+  //-------------------------------------
+  //end point
+  if (black == true){
+    resetCounts();
+    for (int r = 0; r < 8; r++){
+      stop();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go2inches();
+    }
+    while(1);
+  }
+}
+
+void rightie(){
+  getSonar();
+  baseRGB();
+
+  if (color_Output < 5){
+    colorDetected = true;
+
+  }else if(color_Output >=5 && color_Output < 8){
+    colorDetected = false;
+  }
+  //-------------------------------------------------------------------
+  // left turn scenerio
+  if (colorDetected == true && turncomplete == true){
+    resetCounts();
+    for (int r = 0; r < 3; r++){
+      stop();
+    }
+    colorCheck();
+
+  }
+
+  //straight scenerio
+  if (color_Output == 5 && straightColor == true){
+    resetCounts();
+    for (int r = 0; r < 3; r++){
+      stop();
+    }
+    colorCheck();
+    straightColor = false;
+
+  }
+  //----------------------------------------------------------------------------
+  if((sonarLeft == true && sonarRight == true) || (sonarLeft == false && sonarRight == true)){
+    if (colorDetected == true){
+      straightColor = true;
+    }
+
+    turncomplete = false;
+    start_turn = false;
+    move('s');
+
+  }
+
+  //-------------------------------
+
+  if (sonarRight == false){
+    turncomplete = false;
+    start_turn = true;
+  }
+
+  if (start_turn == true){
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go6inches();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnRight();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go7inches();
+    }
+    turncomplete = true;
+    start_turn = false;
+  }
+
+  //-----------------------------------
+
+  if (sonarRight == true && dF < 6.00)
+  {
+    resetCounts();
+    for (int r = 0; r < 3; r++){
+      stop();
+      }
+    delay(200);//////////////////////
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnLeft();
+      }
+  }
+  //-------------------------------------
+  //end point
+  if (black == true){
+    resetCounts();
+    for (int r = 0; r < 3; r++){
+      stop();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go2inches();
+    }
+    while(1);
+  }
+}
+
+void perRight(){
+  getSonar();
+  baseRGB();
+
+  if (color_Output < 5){
+    colorDetected = true;
+
+  }else{
+    colorDetected = false;
+  }
+
+  // left turn scenerio
+  if (colorDetected == true && turncomplete == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    for (int r = 0; r < 1; r++){
+      runStepper(45,'A');
+    }
+    runServo();
+
+    // colorDetected = false;
+  }
+
+  // right turn scenerio
+  // if (straightColor == true && turncomplete == true){
+  //   resetCounts();
+  //   for (int r = 0; r < 70; r++){
+  //     stop();
+  //   }
+  //   for (int r = 0; r < 7; r++){
+  //     runStepper(45,'A');
+  //   }
+  //   runServo();
+  //
+  //   right_turn_done = true;
+  //   // turncomplete = false;
+  //   straightColor = false;
+  // }
+
+  if (color_Output == 5 && straightColor == true){
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+    }
+    for (int r = 0; r < 1; r++){
+      runStepper(45,'A');
+    }
+    runServo();
+    straightColor = false;
+
+  }
+
+  if((sonarLeft == true && sonarRight == true) || (sonarRight == true && sonarLeft == false)){
+    if (colorDetected == true){
+      straightColor = true;
+
+    }
+    turncomplete = false;
+    start_turn = false;
+    move('s');
+
+  }
+
+  //-------------------------------
+
+  if (sonarRight == false){
+    turncomplete = false;
+    start_turn = true;
+  }
+
+  if (start_turn == true){
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        go6inches();
+      }
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        turnRight();
+      }
+      resetCounts();
+      for (int r = 0; r < 70; r++){
+        go7inches();
+      }
+      turncomplete = true;
+      start_turn = false;
+  }
+
+  //-----------------------------------
+
+  if (sonarRight == true && dF < 6.00)
+  {
+    // right_turn_done = false;
+    resetCounts();
+    for (int r = 0; r < 5; r++){
+      stop();
+      }
+    delay(200);
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      turnLeft();
+      }
+
+    // turncomplete = true;
+  }
+
+  if (black == true){
+    resetCounts();
+    for (int r = 0; r < 8; r++){
+      stop();
+    }
+    resetCounts();
+    for (int r = 0; r < 70; r++){
+      go2inches();
+    }
+    while(1);
   }
 }

@@ -8,17 +8,56 @@
 
 void loop(){
 
-/*/
+/**/
+// baseRGB();
+// dispColors();
+// color_Output = 1;
+// colorCheck();
+// color_Output = 1;
+// color_Check();
+// displayCounts();
+// perLeft();
+// perRight();
+rightie();
+// topRGB();
+  // solveMaze();
+  // baseRGB();
+  //
+  // if (color_Output < 5 ){
+  //   if (color_Output == 5 ){
+  //     colorDetected = true;
+  //   }
+  // }
+
+
+ //  if (prvColor == 1  && currentColor == 5){
+ //    driveForward(0,0);
+ //    for (int r = 0; r < 80; r++){
+ //       runStepper(45, 'A');
+ //   }
+ //
+ // }else{
+ //   driveForward(50,50);
+ // }
+
+
+  // getSonar();
+  // Serial.println(fwallPossible);
+  // displayDist();
+   // solveMaze();
+  // followRight();
   // color_Check();
   // baseRGB();
+  // baseRGBytu();
+  // dispColors();
   // go1feet();
   // solveMaze();
-  driveForward(100,100);
   // displayCounts();
   // delay(500);
   // grdRGB();
+  // baseRGB();
   // dispColors();
-//   for (int r = 0; r < 120; r++){
+//   for (int r = 0; r < 80; r++){
 //     runStepper(45, 'A');
 // }
 
@@ -26,122 +65,103 @@ void loop(){
 //====================================================//
 //------------Maze Solving Algo ----------------------//
 //====================================================//
-  getSonar();
-  baseRGB();
+getSonar();
+baseRGBytu();
 
-  if(color_Output < 5)
-  {
-    sorting = true;
+if (color_Output < 5){
+  colorDetected = true;
+
+}else if(color_Output >=5 && color_Output < 8){
+  colorDetected = false;
+}
+//-------------------------------------------------------------------
+// left turn scenerio
+if (colorDetected == true && turncomplete == true){
+  resetCounts();
+  for (int r = 0; r < 5; r++){
+    stop();
+  }
+  colorCheck();
+
+}
+
+//straight scenerio
+if (color_Output == 5 && straightColor == true){
+  resetCounts();
+  for (int r = 0; r < 5; r++){
+    stop();
+  }
+  colorCheck();
+  straightColor = false;
+
+}
+//----------------------------------------------------------------------------
+if((sonarLeft == true && sonarRight == true) || (sonarLeft == false && sonarRight == true)){
+  if (colorDetected == true){
+    straightColor = true;
   }
 
+  turncomplete = false;
+  start_turn = false;
+  move('s');
 
-  // go straight
-  if((sonarLeft == true && sonarRight == true) || (sonarLeft == true && sonarRight == false)) {
-
-    if (sorting == true){
-      for (int r = 0; r < 120; r++){
-        stop();
-      }
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go1feet();
-      }
-      for (int r = 0; r < 7; r++){
-        runStepper(45, 'A');
-      }
-      runServo();
-      sorting = false;
-
-    } else {
-      start_turn = false;
-      move('s');
-    }
-  }
+}
 
 //-------------------------------
-  // turn left
-  if (sonarLeft == false){
-    start_turn = true;
+
+if (sonarRight == false){
+  turncomplete = false;
+  start_turn = true;
+}
+
+if (start_turn == true){
+  resetCounts();
+  for (int r = 0; r < 5; r++){
+    stop();
   }
-
-  if (start_turn == true){
-
-    if(sorting == true){
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go6inches();
-      }
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        turnLeft();
-      }
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go7inches();
-      }
-      for (int r = 0; r < 7; r++){
-        runStepper(45, 'A');
-      }
-      runServo();
-      sorting = false;
-//----------------------------------------
-    } else {
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go6inches();
-      }
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        turnLeft();
-      }
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go7inches();
-      }
-    }
-
-    start_turn = false;
+  resetCounts();
+  for (int r = 0; r < 70; r++){
+    go6inches();
   }
+  resetCounts();
+  for (int r = 0; r < 70; r++){
+    turnRight();
+  }
+  resetCounts();
+  for (int r = 0; r < 70; r++){
+    go7inches();
+  }
+  turncomplete = true;
+  start_turn = false;
+}
 
 //-----------------------------------
-  // turn right
-  if (sonarLeft == true && dF < 6.00)
-  {
-    for (int r = 0; r < 120; r++){
-      stop();
-    }
-    delay(500);
-    resetCounts();
-    for (int r = 0; r < 120; r++){
-      turnRight();
-    }
 
-    if (sorting == true){
-      resetCounts();
-      for (int r = 0; r < 120; r++){
-        go6inches();
-      }
-      for (int r = 0; r < 7; r++){
-        runStepper(45, 'A');
-      }
-      runServo();
-      sorting = false;
+if (sonarRight == true && dF < 6.00)
+{
+  resetCounts();
+  for (int r = 0; r < 5; r++){
+    stop();
     }
+  // delay(200);//////////////////////
+  resetCounts();
+  for (int r = 0; r < 70; r++){
+    turnLeft()();
+    }
+}
+//-------------------------------------
+//end point
+if (black == true){
+  resetCounts();
+  for (int r = 0; r < 8; r++){
+    stop();
   }
-//-----------------------------------------
-  // //dead end
-  // if (sonarLeft == true && dF < 6.00 && sonarRight == true)
-  // {
-  //   for (int r = 0; r < 120; r++){
-  //     stop();
-  //     }
-  //   delay(500);
-  //   resetCounts();
-  //   for (int r = 0; r < 120; r++){
-  //     turnRight();
-  //     }
-  // }
-
+  resetCounts();
+  for (int r = 0; r < 70; r++){
+    go2inches();
+  }
+  while(1);
+}
 //==============================================================
 
 
