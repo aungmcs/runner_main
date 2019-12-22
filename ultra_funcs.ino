@@ -1,11 +1,11 @@
 void getSonar(){
   /*
-    this func gets distance from the three ultrasonic sensors and
+    this func gets distance from the five ultrasonic sensors and
     convert it into boolean values based on the distance threshold
   */
-  dL = sonar[0].ping_cm();
-  dF = sonar[1].ping_cm();
-  dR = sonar[2].ping_cm();
+  dL = sonar[0].ping_cm(); // left distance
+  dF = sonar[1].ping_cm(); // front distance
+  dR = sonar[2].ping_cm(); // right distance
   dFr = sonar[3].ping_cm(); // front right
   dFl = sonar[4].ping_cm(); // front left
 
@@ -16,7 +16,7 @@ void getSonar(){
 
 // left
   if(dL > 0.00 && dL < 10.00){
-    sonarLeft = true;
+    sonarLeft = true; // left wall detected
     dist_left = dL;
 
   }else if (dL >= 10.00){
@@ -39,7 +39,7 @@ void getSonar(){
 // front
   if(dF > 0.00 && dF <= 6.00){
     sonarFront = true;
-    dist_front = dF;
+    dist_front = dF; // front wall detected
 
   }else if (dF > 6.00){
     sonarFront = false;
@@ -60,22 +60,20 @@ void getSonar(){
 
 // right
   if(dR > 0.00 && dR < 8.00){
-    sonarRight = true;
+    sonarRight = true; // right wall detected
     dist_right = dR;
 
   }else if(dR >= 8.00){
     sonarRight = false;
     dist_right = 0.00;
   }
-//---------------------------------------
 
-  prv_dFr = dFr;
 }
 
 
 void sonarGuided(){
   /*
-    the desire left and right speed are calculated based on
+    the desire left and right speeds are calculated based on
     the left and right wall distance from the robot
   */
   dist_error = dist_left - dist_right;

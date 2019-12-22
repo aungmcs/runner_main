@@ -1,6 +1,6 @@
 
-void runStepper (float degree, char direct) //Run 45 degrees turns every 1 second
-{
+void runStepper (float degree, char direct){
+  // run the stepper motor 45 degrees for every 1 second
   if ( direct == 'C' ){
     digitalWrite(dir,HIGH);
 
@@ -20,6 +20,7 @@ void runStepper (float degree, char direct) //Run 45 degrees turns every 1 secon
 }
 
 void runServo(){
+  // runs the servo motor for dropping mechanism
     myServo.write(30);
     delay(1500);
     myServo.write(98);
