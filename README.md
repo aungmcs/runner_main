@@ -1,4 +1,6 @@
 # Urban Facilitating & Maze Solving Robot
+![](images/Robotian_Assembly v2.png)
+
 This robot was developed for a Robotic Competition.
 It has mainly two functionalities:</br>
 - Solving Maze
