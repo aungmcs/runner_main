@@ -21,6 +21,7 @@ It has mainly two functionalities:</br>
 - Embedded Programming (Arduino)
 - Circuit Theory
 - Digital Electronics
+- Mobile Robot Design
 
 ### Game Details
 >This is about the Senior level competition of Myanmar Robotians Competition 2019.
