@@ -1,5 +1,5 @@
 # Urban Facilitating & Maze Solving Robot
-This robot was prepared for a Robotic Competition.
+This robot was developed for a Robotic Competition.
 It has mainly two functionalities:</br>
 - Solving Maze
 - Dropping Cubes (on the way of solving the maze)
