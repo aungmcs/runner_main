@@ -1,5 +1,6 @@
 # Urban Facilitating & Maze Solving Robot
-![](images/Robotian_Assembly v2.png)
+
+![](images/robo_assem.png)
 
 This robot was developed for a Robotic Competition.
 It has mainly two functionalities:</br>
@@ -46,9 +47,9 @@ It has mainly two functionalities:</br>
 The sensors utilized in this project (ultrasonic and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
 
 ### Team Memebers
-- Aung Myo Htet
-- Htet Arkar
-- Htoo Wai Yan Aung
-- Myat Min Thu
-- Waiyar Aung
+- [Aung Myo Htet](https://www.facebook.com/aungmyo.htet.9400)
+- [Htet R Kar](https://www.facebook.com/profile.php?id=100006272985879)
+- [Htoo Wai Yan Aung](https://www.facebook.com/profile.php?id=100008665359515)
+- [Myat Min Thu](https://www.facebook.com/myat.minthu.315)
+- [Waiyar Aung](https://www.facebook.com/wai.aung.33)
 
