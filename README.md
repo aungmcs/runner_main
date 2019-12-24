@@ -40,7 +40,7 @@ It has mainly two functionalities:</br>
 >The robot will go from start point to end point by detecting the necessity by the colours on the floor and placing the blocks matching the color as it is carrying.
 
 ### Furthure Development
-The sensors utilized in this project (ultrasonics and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
+The sensors utilized in this project (ultrasonic and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
 
 ### Team Memebers
 - Aung Myo Htet
