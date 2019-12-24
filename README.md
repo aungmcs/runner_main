@@ -25,22 +25,22 @@ It has mainly two functionalities:</br>
 ### Game Details
 >This is about the Senior level competition of Myanmar Robotians Competition 2019.
 >The name of the Senior Level Competition is Urban Facilities Assistant.
-
+>
 >This game is inspired by thinking about how Robots can help to develop the basic requirements of a City.
 >The game includes four basic requirements of a city.
 >These requirements are : water, electricity, recycle system and greenspace.
-
+>
 >The requirement will be represented by four different colors.
 >Four teams will have to place their robots in the arena of competition.
 >Arena will be divided into four parts, each representing a city.
 >Each robots have to take care of the necessity in its city.
 >The places with requirements is shown on the floor for the robots to detect.
 >Four blocks with different colors will be placed inside the factories.
-
+>
 >The robot will go from start point to end point by detecting the necessity by the colours on the floor and placing the blocks matching the color as it is carrying.
 
 ### Furthure Development
-The sensors utilized in this project (ultrasonics and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more on further development.
+The sensors utilized in this project (ultrasonics and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
 
 ### Team Memebers
 - Aung Myo Htet
