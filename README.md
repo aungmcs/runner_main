@@ -7,6 +7,8 @@ It has mainly two functionalities:</br>
 - Solving Maze
 - Dropping Cubes (on the way of solving the maze)
 
+The Robot Design was developed by [Htet R Kar](https://www.facebook.com/profile.php?id=100006272985879) and [Waiyar Aung](https://www.facebook.com/wai.aung.33).<br>
+__Robot Model__ : [https://a360.co/35Twe6T](https://a360.co/35Twe6T)
 
 ### Electronic Components List
 - Arduino Mega - 1pc
