@@ -14,6 +14,7 @@ __Robot Model__ : [https://a360.co/35Twe6T](https://a360.co/35Twe6T)
 Both acrylic plates and 3D printing parts were used for the robot body frame.<br>
 [HAKSA Hardware Solutions](https://www.facebook.com/haksahardwaresolutions/), which provide quality 3D printing services in Myanmar, sponsored our team for this competition regarding 3D printing parts.
 
+
 ### Electronic Components List
 - Arduino Mega - 1pc
 - Ultrasonic Sensor HC-SR04 - 5pcs
