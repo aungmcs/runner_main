@@ -10,6 +10,10 @@ It has mainly two functionalities:</br>
 The Robot Design was developed by [Htet R Kar](https://www.facebook.com/profile.php?id=100006272985879) and [Waiyar Aung](https://www.facebook.com/wai.aung.33).<br>
 __Robot Model__ : [https://a360.co/35Twe6T](https://a360.co/35Twe6T)
 
+### Robot Construction
+Both acrylic plates and 3D printing parts were used for the robot body frame.<br>
+[HAKSA Hardware Solutions](https://www.facebook.com/haksahardwaresolutions/), which provide quality 3D printing services in Myanmar, sponsored our team for this competition regarding 3D printing parts.
+
 ### Electronic Components List
 - Arduino Mega - 1pc
 - Ultrasonic Sensor HC-SR04 - 5pcs
