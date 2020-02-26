@@ -1232,7 +1232,7 @@ void perLeft() {
 
 
 void leftie(){
-  // left wall following with urban facility assisstant feature
+  // left wall following maze alogrithm with urban facility assisstant feature
 
   getSonar();
 

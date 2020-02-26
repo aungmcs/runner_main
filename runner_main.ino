@@ -7,5 +7,8 @@
 
 
 void loop(){
-  
+
+  // left wall following maze alogrithm embedded with cube solving feature
+  leftie();
+
 }
