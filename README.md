@@ -5,10 +5,19 @@
 This robot was developed for a Robotic Competition.
 It has mainly two functionalities:</br>
 - Solving Maze
-- Dropping Cubes (on the way of solving the maze)
+- Dropping Cubes (on the way of solving the maze)<br><br>
+
+
+>**Upon checking the codes, I would advise you to go through the file __runner_main.ino__ first as it's the main function and explore other ones after that eventually. A good command in C++ programming and familiarity with arduino microcontroller would help understanding these codes.**
+
 
 The Robot Design was developed by [Htet R Kar](https://www.facebook.com/profile.php?id=100006272985879) and [Waiyar Aung](https://www.facebook.com/wai.aung.33).<br>
 __Robot Model__ : [https://a360.co/35Twe6T](https://a360.co/35Twe6T)
+
+### Robot Construction
+Both acrylic plates and 3D printing parts were used for the robot body frame.<br>
+[HAKSA Hardware Solutions](https://www.facebook.com/haksahardwaresolutions/), which provide quality 3D printing services in Myanmar, sponsored our team for this competition regarding 3D printing parts.
+
 
 ### Electronic Components List
 - Arduino Mega - 1pc
