@@ -11,7 +11,7 @@ It has mainly two functionalities:</br>
 
 
 >**Upon checking the codes, I would advise you to go through the file __runner_main.ino__ first as it's the main function and explore other ones after that eventually. A good command in C++ programming and familiarity with arduino microcontroller would help understanding these codes.**
-
+<br>
 
 The Robot Design was developed by [Htet R Kar](https://www.facebook.com/profile.php?id=100006272985879) and [Waiyar Aung](https://www.facebook.com/wai.aung.33).<br>
 __Robot Model__ : [https://a360.co/35Twe6T](https://a360.co/35Twe6T)
@@ -40,21 +40,18 @@ Both acrylic plates and 3D printing parts were used for the robot body frame.<br
 - Mobile Robot Design
 
 ### Game Details
->This is about the Senior level competition of Myanmar Robotians Competition 2019.
->The name of the Senior Level Competition is Urban Facilities Assistant.
->
->This game is inspired by thinking about how Robots can help to develop the basic requirements of a City.
->The game includes four basic requirements of a city.
->These requirements are : water, electricity, recycle system and greenspace.
->
->The requirement will be represented by four different colors.
->Four teams will have to place their robots in the arena of competition.
->Arena will be divided into four parts, each representing a city.
->Each robots have to take care of the necessity in its city.
->The places with requirements is shown on the floor for the robots to detect.
->Four blocks with different colors will be placed inside the factories.
->
->The robot will go from start point to end point by detecting the necessity by the colours on the floor and placing the blocks matching the color as it is carrying.
+Senior level competition of Myanmar Robotians Competition 2019 under the theme of __Urban Facilities Assistant__.<br>
+<br>
+This game is inspired from the idea of how robots can help to develop the basic requirements of a city. The game includes four basic requirements of a city: water, electricity, recycle system and greenspace.<br>
+<br>
+- The requirement will be represented by four different colors.
+- Four teams will have to place their robots in the arena of competition.
+- Arena will be divided into four parts, each representing a city.<br>
+- Each robots have to take care of the necessity in its city.<br>
+- The places with requirements is shown on the floor for the robots to detect.<br>
+- Four blocks with different colors will be placed inside the factories.<br>
+<br>
+The robot will go from start point to end point by detecting the necessity by the colours on the floor and placing the blocks matching the color as it is carrying.<br>
 
 ### Furthure Development
 The sensors utilized in this project (ultrasonic and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
