@@ -2,6 +2,8 @@
 
 ![](images/robo_assem.png)
 
+__About the competition__: https://www.facebook.com/todaystalkmntv/videos/472765116948239<br>
+<br>
 This robot was developed for a Robotic Competition.
 It has mainly two functionalities:</br>
 - Solving Maze
