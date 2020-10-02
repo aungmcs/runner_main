@@ -33,8 +33,8 @@ Both acrylic plates and 3D printing parts were used for the robot body frame.<br
 - Stepper Motor Driver DRV8825 - 1pc
 
 ### Applied Engineering Knowledge
-- Control Theory (PID Controller)
-- Embedded Programming (Arduino)
+- Control Theory
+- Embedded Programming
 - Circuit Theory
 - Digital Electronics
 - Mobile Robot Design
