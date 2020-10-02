@@ -51,7 +51,7 @@ This game is inspired from the idea of how robots can help to develop the basic 
 - The places with requirements is shown on the floor for the robots to detect.<br>
 - Four blocks with different colors will be placed inside the factories.<br>
 <br>
-The robot will go from start point to end point by detecting the necessity by the colours on the floor and placing the blocks matching the color as it is carrying.<br>
+The robot will manoeuvre from the starting point to end point through the maze by detecting the colours on the floor and placing the blocks matching the color as it is carrying.<br>
 
 ### Furthure Development
 The sensors utilized in this project (ultrasonic and color sensor) seem to be vulnerable to noises and exhibit unexpected and undesirable behaviour at certain times. __Sensor Data Filteration__ should be considered more meticulously on further development.
